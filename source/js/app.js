@@ -2,16 +2,26 @@
 // 出題順をシャッフル
 quiz = _.shuffle(quiz);
 
-// console.log(new SpeechSynthesisUtterance());
-
 var speaker  = new Speaker(),
 	recorder = new Recorder(),
 	player   = new Player(),
 	grades   = [
-		'ゴミカス',
-		'まだまだだね',
-		'あと一歩',
-		'すごいですね！',
+		{
+			message: 'ゴミカス',
+			label: 'default'
+		},
+		{
+			message: 'まだまだだね',
+			label: 'default'
+		},
+		{
+			message: 'あと一歩',
+			label: 'warning'
+		},
+		{
+			message: 'すごいですね！',
+			label: 'success'
+		}
 	];
 
 /**
@@ -63,9 +73,12 @@ function finished() {
 	$('#result').modal('show');
 	speaker.say('クイズ終了です', function() {
 		var grade = grades[Math.floor((player.accepted / player.asked) * (grades.length - 1))],
-			msg   =  player.asked + '問中' + player.accepted + '問正解でした。' + grade;
+			msg   =  player.asked + '問中' + player.accepted + '問正解でした。';
 		
-		speaker.say(msg);
+		speaker.say(msg, function() {
+			$('#grade').addClass('label-' + grade.label).text(grade.message);
+			speaker.say(grade.message);
+		});
 	});
 }
 
