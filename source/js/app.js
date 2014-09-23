@@ -47,15 +47,21 @@ function next(q, idx) {
 	$('.questions').text(player.asked);
 	$('#question').text(question.question);
 
+	// 残り時間をMAXに
+	$('#parked-time').css({width: '100%'});
+
 	speaker.say(question.question, function() {
 		var past = 0,
 			tid;
 
-		// ヒントを描画
+		// ヒント・残り時間を描画
 		recorder.recording(function() {
 			// 音声入力可能になったら
 			tid = setInterval(function() {
 				past++;
+
+				$('#parked-time').css({width: 100 - (past / question.time * 100) + '%'});
+
 				if(!_.isUndefined(question.hints)) {
 					var showableIdx = Math.ceil((past / question.time) * (question.hints.length));
 
@@ -67,8 +73,8 @@ function next(q, idx) {
 				}
 			}, 1000);
 		}, function() {
+			// 音声入力が終わったらタイマーをリセット
 			clearInterval(tid);
-			// 音声入力が終わったら
 		});
 
 		recorder.start(function(said) {
@@ -87,6 +93,7 @@ function next(q, idx) {
 				next(q, idx + 1);
 			});
 		}, function() {
+			alert('8秒以内に答えてください！');
 			console.error(arguments);
 		});
 	});
@@ -96,7 +103,8 @@ function finished() {
 	$('#result').modal('show');
 	speaker.say('クイズ終了です', function() {
 		var grade = grades[Math.floor((player.accepted / player.asked) * (grades.length - 1))],
-			msg   =  player.asked + '問中' + player.accepted + '問正解でした。';
+			// NOTE: 中と書くと"なか"と読まれることがある
+			msg   =  player.asked + '問ちゅう' + player.accepted + '問正解でした。';
 		
 		speaker.say(msg, function() {
 			$('#grade').addClass('label-' + grade.label).text(grade.message);
