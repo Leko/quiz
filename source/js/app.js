@@ -60,7 +60,8 @@ function next(q, idx) {
 			tid = setInterval(function() {
 				past++;
 
-				$('#parked-time').css({width: 100 - (past / question.time * 100) + '%'});
+				var percentage = (100 - (past / question.time * 100));
+				$('#parked-time').css({width: percentage + '%'});
 
 				if(!_.isUndefined(question.hints)) {
 					var showableIdx = Math.ceil((past / question.time) * (question.hints.length));
