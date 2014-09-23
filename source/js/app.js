@@ -48,6 +48,29 @@ function next(q, idx) {
 	$('#question').text(question.question);
 
 	speaker.say(question.question, function() {
+		var past = 0,
+			tid;
+
+		// ヒントを描画
+		recorder.recording(function() {
+			// 音声入力可能になったら
+			tid = setInterval(function() {
+				past++;
+				if(!_.isUndefined(question.hints)) {
+					var showableIdx = Math.ceil((past / question.time) * (question.hints.length));
+
+					$('#hints').empty();
+					question.hints.slice(0, showableIdx).forEach(function(hint, i) {
+						var $li = $('<li></li>').text('ヒント' + i + '：' + hint);
+						$('#hints').append($li);
+					});
+				}
+			}, 1000);
+		}, function() {
+			clearInterval(tid);
+			// 音声入力が終わったら
+		});
+
 		recorder.start(function(said) {
 			var msg = '';
 			if(_.contains(question.answers, said)) {

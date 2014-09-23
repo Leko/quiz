@@ -26,6 +26,10 @@ Recorder.prototype = {
 			this._recorder.start();
 		} catch(e) {}
 	},
+	recording: function(onaudiostart, onaudioend) {
+		this._recorder.onaudiostart = onaudiostart;
+		this._recorder.onaudioend = onaudioend;
+	},
 	end: function() {
 		this._recorder.end();
 	}
