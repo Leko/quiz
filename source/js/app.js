@@ -6,7 +6,13 @@ quiz = _.shuffle(quiz);
 
 var speaker  = new Speaker(),
 	recorder = new Recorder(),
-	player   = new Player();
+	player   = new Player(),
+	grades   = [
+		'ゴミカス',
+		'まだまだだね',
+		'あと一歩',
+		'すごいですね！',
+	];
 
 /**
  * クイズを出題する
@@ -28,8 +34,7 @@ function next(q, idx) {
 	player.asked++;
 
 	// 各種数値・問題文を描画
-	$('#accepted').text(player.accepted);
-	$('#questions').text(player.asked);
+	$('.questions').text(player.asked);
 	$('#question').text(question.question);
 
 	speaker.say(question.question, function() {
@@ -43,6 +48,8 @@ function next(q, idx) {
 				msg = '不正解です！';
 			}
 
+			$('.accepted').text(player.accepted);
+
 			speaker.say(msg, function() {
 				next(q, idx + 1);
 			});
@@ -53,10 +60,20 @@ function next(q, idx) {
 }
 
 function finished() {
+	$('#result').modal('show');
 	speaker.say('クイズ終了です', function() {
+		var grade = grades[Math.floor((player.accepted / player.asked) * (grades.length - 1))],
+			msg   =  player.asked + '問中' + player.accepted + '問正解でした。' + grade;
+		
+		speaker.say(msg);
 	});
 }
 
 $(function() {
+	// 初期描画
+	$('.questions').text(player.asked);
+	$('.accepted').text(player.accepted);
+	$('#question').text(question.question);
+
 	next(quiz);
 });

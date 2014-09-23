@@ -13,7 +13,7 @@
 		<!-- 正解数/出題数を表示する領域 -->
 		<div class="clearfix">
 			<div class="pull-right">
-				<span id="accepted"></span> / <span id="questions"></span>
+				<span class="accepted"></span> / <span class="questions"></span>
 			</div>
 		</div>
 
@@ -26,11 +26,30 @@
 		<ul id="hint"></ul>
 	</div>
 
+	<div class="modal fade" id="result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel">結果発表</h4>
+				</div>
+				<div class="modal-body">
+					<span class="questions"></span>問中<strong class="accepted"></strong>問正解
+				</div>
+				<div class="modal-footer">
+					<a href="" class="btn btn-default" data-dismiss="modal">もう一度遊ぶ</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<!-- クイズデータ -->
 	<script src="js/quiz.js"></script>
 
 	<script src="bower/jquery/dist/jquery.min.js"></script>
 	<script src="bower/underscore/underscore-min.js"></script>
+	<script src="bower/bootstrap/dist/js/bootstrap.min.js"></script>
 
 	<!-- 音声入出力の自作ライブラリ -->
 	<script src="js/lib/recorder.js"></script>

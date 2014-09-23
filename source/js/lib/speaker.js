@@ -12,28 +12,22 @@
 	function Speaker() {}
 
 	Speaker.prototype = {
-		_getOpts: function() {
-			var opts = _.extend({}, defaults),
-				config = new SpeechSynthesisUtterance();
-
-			for(var p in opts) {
-				if(!opts.hasOwnProperty(p)) continue;
-
-				config[p] = opts[p];
-			}
-			return config;
-		},
 		say: function(sentence, callback) {
-			var config = this._getOpts();
+			callback = callback || function() {};
+
+			var config = new SpeechSynthesisUtterance(sentence);
+			_.extend(config, defaults);
 
 			config.timestamp = new Date().getTime();
 			console.log(config);	// FIXME: なぜかconsole.logしないとonendが取れない
 
-			config.text = sentence;
-			config.onend = function() {
-				console.log('speaker:end', config);
-				callback();
-			};
+			config.addEventListener('end', function() {
+				// NOTE: ここを非同期にしないと複数回同じ音声が再生される
+				setTimeout(function() {
+					config.removeEventListener('end');
+					callback();
+				}, 0);
+			});
 
 			speechSynthesis.speak(config);
 		}
