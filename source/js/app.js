@@ -50,6 +50,9 @@ function next(q, idx) {
 	// 残り時間をMAXに
 	$('#parked-time').css({width: '100%'});
 
+	// ヒントを空に
+	$('#hints').empty();
+
 	speaker.say(question.question, function() {
 		var past = 0,
 			tid;
