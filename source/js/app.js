@@ -59,6 +59,8 @@ function next(q, idx) {
 
 		// ヒント・残り時間を描画
 		recorder.recording(function() {
+			$('#recorder-state').text('ON').parent().removeClass('alert-danger').addClass('alert-success');
+
 			// 音声入力可能になったら
 			tid = setInterval(function() {
 				past++;
@@ -77,6 +79,8 @@ function next(q, idx) {
 				}
 			}, 1000);
 		}, function() {
+			$('#recorder-state').text('OFF').parent().removeClass('alert-success').addClass('alert-danger');
+
 			// 音声入力が終わったらタイマーをリセット
 			clearInterval(tid);
 		});
